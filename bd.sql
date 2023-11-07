@@ -8,9 +8,7 @@ create table register(
     email varchar(255),
     senha varchar(255),
     cep varchar(255),
-    cidade varchar(255),
     bairro varchar(255),
     endereco varchar(255),
-    numero varchar(255),
-	complemento varchar(255)
+	complemento varchar(255) null
 );

@@ -20,17 +20,15 @@ app.get('/', (request: Request, response: Response) => {
     response.json({ message: "vai" })
 })
 
-app.get("/login", async (request: Request, response: Response) => {
+app.post("/login", async (request: Request, response: Response) => {
     try {
-        const { email, senha } = request.query
-        console.log(email)
-        console.log(senha)
-        const parametros = [email, senha]
+        const valores = request.body
+        const parametros = [valores.email, valores.senha]
         const query = "SELECT * FROM register WHERE email = ? and senha = ?"
         
+
         const user = bdConexao.query(query, parametros)
-        console.log({ user })
-        response.status(200).json({ message: "Usuário encontrado", response })
+        response.status(200).json({ message: "Usuário encontrado", response: valores})
     }
 
     catch (error) {
@@ -45,8 +43,8 @@ app.post("/register", (request: Request, response: Response) => {
 
     try {
         const valores = request.body
-        const parametros = [valores.nome, valores.rg, valores.cpf, valores.email, valores.senha, valores.cep, valores.cidade, valores.bairro, valores.endereco, valores.numero, valores.complemento]
-        const query = "INSERT INTO register (nome, rg, cpf, email, senha, cep, cidade, bairro, endereco, numero, complemento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        const parametros = [valores.nome, valores.rg, valores.cpf, valores.email, valores.senha, valores.cep, valores.bairro, valores.endereco, valores.complemento]
+        const query = "INSERT INTO register (nome, rg, cpf, email, senha, cep, bairro, endereco, complemento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
         console.log(request.body.data);
 
         bdConexao.query(query, parametros)
