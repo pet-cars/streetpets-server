@@ -21,20 +21,19 @@ app.get('/', (request: Request, response: Response) => {
 })
 
 app.post("/login", async (request: Request, response: Response) => {
-    try {
-        const valores = request.body
-        const parametros = [valores.email, valores.senha]
-        const query = "SELECT * FROM register WHERE email = ? and senha = ?"
-        
 
-        const user = bdConexao.query(query, parametros)
-        response.status(200).json({ message: "Usuário encontrado", response: valores})
-    }
+    const valores = request.body
 
-    catch (error) {
-        console.log('deu erro')
-        console.log(error)
-    }
+    bdConexao.query("SELECT * FROM register WHERE email = ? AND senha = ?", [valores.email, valores.senha], (error: Error, result: any) => {
+        if (error) {return response.json(error)}
+        else { 
+            if (result.length > 0) {
+                return response.json({message: 'Usuário encontrado', dados: result})
+            } else {
+                return response.json({message: 'Usuário não encontrado', dados: result})
+            }
+        }
+    })
 })
 
 app.post("/register", (request: Request, response: Response) => {
