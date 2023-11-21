@@ -59,6 +59,20 @@ app.post("/register", (request: Request, response: Response) => {
         }
     }
 });
+app.get('/dados-dono/:id', (request: Request, response: Response) => {
+    const valores = request.params.id
+
+    bdConexao.query("SELECT * FROM register WHERE id = ?", [valores], (error: Error, result: any) => {
+        if (error) {return response.json(error)}
+        else { 
+            if (result.length > 0) {
+                return response.json({dados: result})
+            } else {
+                return response.json({message: 'Dados não encontrados', dados: result})
+            }
+        }
+    })
+})
 // app.use('/', rotas())
 app.listen(3333, () => "Backend Funcionando")
 
