@@ -2,6 +2,8 @@ import rotas from "../rotas"
 import express from 'express'
 import { Router, Request, Response } from 'express'
 import bdConexao from '../config/banco'
+import { generateToken } from "./token";
+import { authenticateToken } from "../middleware";
 
 const mysql = require('mysql');
 const cors = require('cors');
@@ -28,13 +30,20 @@ app.post("/login", async (request: Request, response: Response) => {
         if (error) {return response.json(error)}
         else { 
             if (result.length > 0) {
-                return response.json({message: 'Usuário encontrado', dados: result})
+                const token = generateToken({ valores });
+                return response.json({message: 'Usuário encontrado', dados: result, token})
             } else {
                 return response.json({message: 'Usuário não encontrado', dados: result})
             }
         }
     })
 })
+
+app.get('/recurso-protegido', authenticateToken, (req: any, res: Response) => {
+    const user = req.headers['authorization'];
+    console.log(user)
+    return res.json({ message: `Recurso protegido acessado por ${user}` });
+});
 
 app.post("/register", (request: Request, response: Response) => {
 
