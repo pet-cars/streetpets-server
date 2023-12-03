@@ -1,9 +1,11 @@
 import rotas from "../rotas"
-import express from 'express'
+import express, { response } from 'express'
 import { Router, Request, Response } from 'express'
 import bdConexao from '../config/banco'
 import { generateToken } from "./token";
 import { authenticateToken } from "../middleware";
+import jwt from 'jsonwebtoken';
+import axios, { AxiosResponse } from 'axios';
 
 const mysql = require('mysql');
 const cors = require('cors');
@@ -68,6 +70,27 @@ app.post("/register", (request: Request, response: Response) => {
         }
     }
 });
+app.get('/verificar-token', async (req: Request, res: Response) => {
+    const token = req.headers.authorization?.split(' ')[1];
+  
+    if (!token) {
+      return res.status(401).json({ message: 'Token não fornecido' });
+    }
+  
+    try {
+      const decodedToken = jwt.verify(token, 'sua_chave_secreta');
+  
+      const response: AxiosResponse = await axios.get('sua_url_da_outra_api', {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+  
+      return res.json(response.data);
+    } catch (error) {
+      return res.status(401).json({ message: 'Token inválido' });
+    }
+  });
 app.get('/dados-dono/:id', (request: Request, response: Response) => {
     const valores = request.params.id
 
