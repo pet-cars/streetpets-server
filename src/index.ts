@@ -242,6 +242,25 @@ app.post("/cadastroPetsRua", (request: Request, response: Response) => {
     };
   }
 });
+app.get("/petsRua", (request: Request, response: Response) => {
+  bdConexao.query(
+    "SELECT * FROM cadastroPetsRua",
+    (error: Error, result: any) => {
+      if (error) {
+        return response.json(error);
+      } else {
+        if (result.length > 0) {
+          return response.json(result);
+        } else {
+          return response.json({
+            message: "Dados não encontrados",
+            dados: result,
+          });
+        }
+      }
+    }
+  );
+});
 
 // app.use('/', rotas())
 app.listen(3333, () => "Backend Funcionando");

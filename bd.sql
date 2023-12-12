@@ -12,3 +12,22 @@ create table register(
     endereco varchar(255),
 	complemento varchar(255) null
 );
+
+create table cadastroPets(
+	id int auto_increment key,
+    nome varchar(255),
+    castrado varchar(255),
+    vacinadoContraRaiva varchar(255),
+    sexo varchar(255),
+    porte varchar(255),
+    especie varchar(255)
+);
+
+create table cadastroPetsRua(
+	id int auto_increment key,
+    aparencia varchar(255),
+    localizacao varchar(255),
+    sexo varchar(255),
+    porte varchar(255),
+    especie varchar(255)
+);
