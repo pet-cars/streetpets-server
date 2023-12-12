@@ -78,10 +78,15 @@ app.post("/register", (request: Request, response: Response) => {
     console.log(request.body.data);
 
     bdConexao.query(query, parametros);
+    const token = generateToken({
+      email: valores.email,
+      senha: valores.senha,
+    });
     response.status(200).json({
       message: "Dados inseridos com sucesso",
       recebe: valores,
       valoresReceibdos: parametros,
+      token,
     });
   } catch {
     (error: any, result: any) => {
